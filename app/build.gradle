@@ -124,4 +124,8 @@ dependencies {
     def material_dialog_version = "3.3.0"
     implementation "com.afollestad.material-dialogs:core:$material_dialog_version"
 
+    // Lottie animations
+    def lottie_version = "3.4.4"
+    implementation "com.airbnb.android:lottie:$lottie_version"
+
 }

@@ -1,7 +1,6 @@
 package com.hackyeah.app.ui.projects
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hackyeah.app.data.NetworkState
@@ -12,6 +11,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
+import android.util.Log
+import java.io.File
 
 class ViewModelProjects @Inject constructor(
     private var repositoryProjects: RepositoryProjects,
@@ -24,6 +25,7 @@ class ViewModelProjects @Inject constructor(
 
     @SuppressLint("CheckResult")
     fun getProjects(): MutableLiveData<List<Project>> {
+        networkState.postValue(NetworkState(status = Status.LOADING))
         disposable = repositoryProjects
             .getProjects()
             .subscribeOn(Schedulers.io())
@@ -38,7 +40,6 @@ class ViewModelProjects @Inject constructor(
                     projectList.postValue(projects)
                 },
                 { throwable ->
-                    Log.e("Felipe ", "throwable " + throwable.message)
                     networkState.postValue(
                         NetworkState(
                             status = Status.FAILED,
@@ -53,9 +54,47 @@ class ViewModelProjects @Inject constructor(
 
     fun getProjectById(id: Int) = projectList.value?.firstOrNull() { it.id == id }
 
+    @SuppressLint("CheckResult")
+    fun addProject(
+        title: String,
+        description: String,
+        ideaSolutionFile: File,
+        ideaImageFile: File,
+        tags: List<String>? = null,
+    ) {
+        networkState.postValue(NetworkState(status = Status.LOADING))
+        disposable = repositoryProjects
+            .addProjects(
+                title,
+                description,
+                ideaSolutionFile,
+                ideaImageFile
+            )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    Log.e("Felipe", "success" )
+                    networkState.postValue(NetworkState(Status.SUCCESS))
+                },
+                { throwable ->
+                    Log.e("Felipe", "throwable " + throwable.message )
+                    networkState.postValue(
+                        NetworkState(
+                            status = Status.FAILED,
+                            error = throwable
+                        )
+                    )
+                }
+            )
+    }
+
     fun resetNetworkState() {
         networkState.value = NetworkState(Status.RESET)
+    }
 
+    fun setLoading() {
+        networkState.value = NetworkState(Status.LOADING)
     }
 
     override fun onCleared() {

@@ -27,7 +27,7 @@ class AdapterComments : RecyclerView.Adapter<ViewHolderComment>() {
         holder.bind(
             commentOwnerUserName = comment.owner.username,
             commentContent = comment.content,
-            commentImageUrl = comment.image,
+            commentImageUrl = comment.image
         )
         holder.itemView.setOnClickListener {
             onClickListener(comment.id)

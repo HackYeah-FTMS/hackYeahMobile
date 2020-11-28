@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.hackyeah.app.databinding.FragmentZeroWasteBinding
@@ -35,6 +36,7 @@ class FragmentZeroWaste : BaseFragment() {
     override fun onStart() {
         super.onStart()
         (activity as MainActivity).showBottomNavigation()
+        (requireActivity() as MainActivity).showHUD()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -48,7 +50,14 @@ class FragmentZeroWaste : BaseFragment() {
                 view.loadUrl(url)
                 return true
             }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                (requireActivity() as MainActivity).hideHUD()
+            }
         }
+        binding.webview.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+        binding.webview.settings.domStorageEnabled = true
     }
 
     override fun onDestroyView() {

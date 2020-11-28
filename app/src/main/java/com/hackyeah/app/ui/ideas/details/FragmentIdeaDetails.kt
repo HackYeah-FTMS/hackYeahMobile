@@ -1,7 +1,6 @@
 package com.hackyeah.app.ui.ideas.details
 
 import android.annotation.SuppressLint
-import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -101,7 +100,6 @@ class FragmentIdeaDetails : BaseFragment(), View.OnClickListener {
             .with(requireContext())
             .load(imageUrl)
             .transition(DrawableTransitionOptions.withCrossFade())
-            .centerCrop()
             .placeholder(R.drawable.image_placeholder)
             .into(binding.ideaImage)
     }

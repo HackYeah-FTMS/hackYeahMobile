@@ -15,6 +15,7 @@ import javax.inject.Inject
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.hackyeah.app.R
+import com.hackyeah.app.data.model.Project
 import com.hackyeah.app.databinding.FragmentProjectDetailsBinding
 import com.hackyeah.app.ui.main.MainActivity
 import com.hackyeah.app.ui.projects.ViewModelProjects
@@ -71,6 +72,7 @@ class FragmentProjectDetails : BaseFragment(), View.OnClickListener {
         setDescription(projectById.description)
         setSolutionImage(projectById.solutionImage)
         setIdeaImage(projectById.ideaImage)
+        setPoints(projectById.points)
     }
 
     private fun setTitle(title: String) {
@@ -99,6 +101,10 @@ class FragmentProjectDetails : BaseFragment(), View.OnClickListener {
             .centerCrop()
             .placeholder(R.drawable.image_placeholder)
             .into(binding.projectIdeaImage)
+    }
+
+    private fun setPoints(points:Int) {
+        binding.pointsCounter.text = points.toString()
     }
 
     override fun onClick(v: View) {

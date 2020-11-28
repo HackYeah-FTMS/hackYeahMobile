@@ -21,12 +21,13 @@ interface ApiService {
     @GET(Endpoints.PROJECTS_URL)
     fun getProjects(): Single<List<Project>>
 
-    @Headers("Content-Type:application/json")
     @Multipart
     @POST(Endpoints.PROJECTS_URL)
     fun uploadProject(
-        @Part image: MultipartBody.Part,
-        @Part jsonDataToSend: MultipartBody.Part
+        @Header("X-User-ID") userId: Long,
+        @Part("data") data: String,
+        @Part imageBefore: MultipartBody.Part,
+        @Part imageAfter: MultipartBody.Part
     ): Single<String>
 
 }

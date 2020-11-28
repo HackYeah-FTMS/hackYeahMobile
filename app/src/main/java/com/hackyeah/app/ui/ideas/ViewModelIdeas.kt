@@ -25,6 +25,7 @@ class ViewModelIdeas @Inject constructor(
 
     @SuppressLint("CheckResult")
     fun getIdeas(): MutableLiveData<List<Idea>> {
+        networkState.postValue(NetworkState(status = Status.LOADING))
         disposable = ideasRepository
             .getIdeas()
             .subscribeOn(Schedulers.io())

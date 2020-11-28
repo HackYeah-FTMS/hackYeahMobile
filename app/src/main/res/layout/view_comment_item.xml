@@ -16,27 +16,6 @@
         android:layout_height="match_parent"
         android:padding="10dp">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/comment_image_wrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            app:cardBackgroundColor="@color/color_background"
-            app:cardCornerRadius="7dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/comment_image"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:scaleType="centerCrop" />
-
-        </androidx.cardview.widget.CardView>
-
         <TextView
             android:id="@+id/comment_owner_user_name"
             android:layout_width="wrap_content"
@@ -44,14 +23,14 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:ellipsize="end"
-            android:fontFamily="@font/raleway_bold"
             android:maxLines="1"
+            android:fontFamily="@font/raleway_bold"
+            tools:text="title"
             android:textColor="@color/color_blue_dark"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/comment_image_wrapper"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="title" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/comment_content"
@@ -63,12 +42,30 @@
             android:textColor="@color/color_grey_text"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/comment_image_wrapper"
             app:layout_constraintTop_toBottomOf="@id/comment_owner_user_name"
-            app:layout_constraintVertical_bias="0.0"
             tools:text="description" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/comment_image_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:cardBackgroundColor="@color/color_background"
+            app:cardCornerRadius="7dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/comment_content"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/comment_image"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -76,8 +73,8 @@
         android:id="@+id/idea_item_image"
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:layout_gravity="bottom"
         android:background="@color/color_blue_dark"
+        android:layout_gravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -4,25 +4,34 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.TransitionDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.hackyeah.app.BaseApplication
 import com.hackyeah.app.R
+import com.hackyeah.app.data.Status
 import com.hackyeah.app.databinding.FragmentNewProjectBinding
 import com.hackyeah.app.di.viewmodels.ViewModelProviderFactory
 import com.hackyeah.app.ui.base.BaseFragment
 import com.hackyeah.app.ui.main.MainActivity
 import com.hackyeah.app.ui.projects.ViewModelProjects
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 class FragmentNewProject : BaseFragment(), View.OnClickListener {
@@ -54,7 +63,7 @@ class FragmentNewProject : BaseFragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentNewProjectBinding.inflate(inflater, container, false)
-//        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
         return binding.root
     }
 
@@ -72,6 +81,7 @@ class FragmentNewProject : BaseFragment(), View.OnClickListener {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+        observeNetworkState()
     }
 
     override fun onClick(v: View) {
@@ -83,9 +93,52 @@ class FragmentNewProject : BaseFragment(), View.OnClickListener {
                 showDialog(binding.solutionImage.id)
             }
             binding.createButton.id -> {
+                viewModelProjects.setLoading()
+                val ideaFile = bitmapToFile(
+                    (binding.ideaImage.drawable as TransitionDrawable).toBitmap(),
+                    binding.ideaImage.drawable.toBitmap().generationId.toString()
+                )
+                val solutionFile = bitmapToFile(
+                    (binding.solutionImage.drawable as TransitionDrawable).toBitmap(),
+                    binding.solutionImage.drawable.toBitmap().generationId.toString()
+                )
 
+                if (ideaFile == null || solutionFile == null) {
+                    return
+                }
+
+                viewModelProjects
+                    .addProject(
+                        binding.projectTitle.text.toString(),
+                        binding.projectDescription.text.toString(),
+                        ideaFile,
+                        solutionFile
+                    )
             }
         }
+    }
+
+    private fun observeNetworkState() {
+        viewModelProjects.resetNetworkState()
+        viewModelProjects
+            .networkState
+            .observe(viewLifecycleOwner, { networkState ->
+
+                val mainActivity = requireActivity() as MainActivity
+                when (networkState.status) {
+                    Status.LOADING -> {
+                        mainActivity.showHUD()
+                    }
+                    Status.SUCCESS -> {
+                        mainActivity.hideHUD()
+                        findNavController().navigateUp()
+                    }
+                    Status.FAILED -> {
+                        mainActivity.hideHUD()
+                        findNavController().navigateUp()
+                    }
+                }
+            })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -145,6 +198,7 @@ class FragmentNewProject : BaseFragment(), View.OnClickListener {
 
         Glide
             .with(requireContext())
+            .asDrawable()
             .load(uri)
             .transition(DrawableTransitionOptions.withCrossFade())
             .centerCrop()
@@ -154,4 +208,26 @@ class FragmentNewProject : BaseFragment(), View.OnClickListener {
         chosenPhotoContainerId = null
     }
 
+    private fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? {
+        var file: File? = null
+        return try {
+            file = File(
+                requireContext().getExternalFilesDir(null)?.absolutePath + File.separator + fileNameToSave
+            )
+            file.createNewFile()
+
+            val bos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos)
+            val bitmapdata = bos.toByteArray()
+
+            val fos = FileOutputStream(file)
+            fos.write(bitmapdata)
+            fos.flush()
+            fos.close()
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            file
+        }
+    }
 }

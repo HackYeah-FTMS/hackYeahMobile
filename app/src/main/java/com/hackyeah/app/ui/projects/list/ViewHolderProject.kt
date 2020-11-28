@@ -37,10 +37,10 @@ class ViewHolderProject(
         Glide
             .with(itemView.context)
             .load(projectImageUrl)
-            .transition(DrawableTransitionOptions.withCrossFade())
             .centerCrop()
-            .placeholder(R.drawable.image_placeholder)
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.projectItemImage)
+
     }
 
 }
