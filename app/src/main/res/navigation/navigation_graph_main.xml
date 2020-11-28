@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph_main"
+    app:startDestination="@id/fragmentProjects">
+
+    <fragment
+        android:id="@+id/fragmentProjects"
+        android:name="com.hackyeah.app.ui.projects.FragmentProjects"
+        android:label="FragmentProjects"
+        tools:layout="@layout/fragment_projects">
+        <action
+            android:id="@+id/action_fragmentProjects_to_fragmentProjectDetails"
+            app:destination="@id/fragmentProjectDetails"
+            app:enterAnim="@anim/slide_left_in"
+            app:exitAnim="@anim/slide_left_out"
+            app:popEnterAnim="@anim/slide_right_in"
+            app:popExitAnim="@anim/slide_right_out">
+
+            <argument
+                android:name="project_id"
+                android:defaultValue="0"
+                app:argType="integer" />
+
+        </action>
+        <action
+            android:id="@+id/action_fragmentProjects_to_fragmentNewProject"
+            app:destination="@id/fragmentNewProject"
+            app:enterAnim="@anim/slide_left_in"
+            app:exitAnim="@anim/slide_left_out"
+            app:popEnterAnim="@anim/slide_right_in"
+            app:popExitAnim="@anim/slide_right_out"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmentProjectDetails"
+        android:name="com.hackyeah.app.ui.projects.details.FragmentProjectDetails"
+        android:label="FragmentProjectDetails"
+        tools:layout="@layout/fragment_project_details">
+
+        <argument
+            android:name="project_id"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentNewProject"
+        android:name="com.hackyeah.app.ui.projects.add.FragmentNewProject"
+        tools:layout="@layout/fragment_new_project"
+        android:label="FragmentNewProject" />
+
+</navigation>
