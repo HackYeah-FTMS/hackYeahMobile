@@ -5,20 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.hackyeah.app.BaseApplication
-import com.hackyeah.app.di.viewmodels.ViewModelProviderFactory
-import com.hackyeah.app.ui.base.BaseFragment
-import javax.inject.Inject
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.hackyeah.app.BaseApplication
 import com.hackyeah.app.R
-import com.hackyeah.app.data.model.Project
 import com.hackyeah.app.databinding.FragmentProjectDetailsBinding
+import com.hackyeah.app.di.viewmodels.ViewModelProviderFactory
+import com.hackyeah.app.ui.base.BaseFragment
 import com.hackyeah.app.ui.main.MainActivity
 import com.hackyeah.app.ui.projects.ViewModelProjects
+import javax.inject.Inject
 
 class FragmentProjectDetails : BaseFragment(), View.OnClickListener {
 
@@ -53,6 +54,11 @@ class FragmentProjectDetails : BaseFragment(), View.OnClickListener {
     override fun onStart() {
         super.onStart()
         (activity as MainActivity).hideBottomNavigation()
+
+        DrawableCompat.setTint(
+            DrawableCompat.wrap(binding.pointsImage.drawable),
+            ContextCompat.getColor(requireContext(), R.color.color_grey_text)
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,9 +67,10 @@ class FragmentProjectDetails : BaseFragment(), View.OnClickListener {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+        binding.pointsWrapper.setOnClickListener(this)
 
         val projectById = viewModelProjects.getProjectById(arguments.projectId)
-        if(projectById == null){
+        if (projectById == null) {
             // TODO handle error
             return
         }
@@ -103,12 +110,23 @@ class FragmentProjectDetails : BaseFragment(), View.OnClickListener {
             .into(binding.projectIdeaImage)
     }
 
-    private fun setPoints(points:Int) {
+    private fun setPoints(points: Int) {
         binding.pointsCounter.text = points.toString()
     }
 
     override fun onClick(v: View) {
+        when (v.id) {
+            binding.pointsWrapper.id -> {
+                binding.pointsCounter.setTextColor(resources.getColor(R.color.color_blue_dark))
+                binding.pointsCounter.text =
+                    (Integer.parseInt(binding.pointsCounter.text.toString()) + 1).toString()
 
+                DrawableCompat.setTint(
+                    DrawableCompat.wrap(binding.pointsImage.drawable),
+                    ContextCompat.getColor(requireContext(), R.color.color_blue_dark)
+                )
+            }
+        }
     }
 
     override fun onDestroyView() {

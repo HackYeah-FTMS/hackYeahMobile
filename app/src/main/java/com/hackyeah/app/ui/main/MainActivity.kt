@@ -40,7 +40,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
 
+        showHUD()
         val navController = findNavController(R.id.nav_host_fragment)
         binding.bottomNavigation.setupWithNavController(navController)
     }

@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.hackyeah.app.BaseApplication
 import com.hackyeah.app.databinding.FragmentProjectsBinding
 import com.hackyeah.app.di.viewmodels.ViewModelProviderFactory
 import com.hackyeah.app.ui.base.BaseFragment
 import javax.inject.Inject
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hackyeah.app.data.Status
 import com.hackyeah.app.ui.main.MainActivity
 import com.hackyeah.app.ui.projects.list.AdapterProjects
 
@@ -67,10 +69,34 @@ class FragmentProjects : BaseFragment(), View.OnClickListener {
             )
         }
 
+        observeNetworkState()
+
         viewModelProjects
             .getProjects()
             .observe(viewLifecycleOwner, {
                 adapterProjects.projectList = it
+            })
+    }
+
+    private fun observeNetworkState() {
+        viewModelProjects.resetNetworkState()
+        viewModelProjects
+            .networkState
+            .observe(viewLifecycleOwner, { networkState ->
+
+                val mainActivity = requireActivity() as MainActivity
+                when (networkState.status) {
+                    Status.LOADING -> {
+                    }
+                    Status.SUCCESS -> {
+                        mainActivity.hideHUD()
+                        findNavController().navigateUp()
+                    }
+                    Status.FAILED -> {
+                        mainActivity.hideHUD()
+                        findNavController().navigateUp()
+                    }
+                }
             })
     }
 
