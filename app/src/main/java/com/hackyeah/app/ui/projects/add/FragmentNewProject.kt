@@ -21,6 +21,7 @@ import com.hackyeah.app.R
 import com.hackyeah.app.databinding.FragmentNewProjectBinding
 import com.hackyeah.app.di.viewmodels.ViewModelProviderFactory
 import com.hackyeah.app.ui.base.BaseFragment
+import com.hackyeah.app.ui.main.MainActivity
 import com.hackyeah.app.ui.projects.ViewModelProjects
 import javax.inject.Inject
 
@@ -55,6 +56,11 @@ class FragmentNewProject : BaseFragment(), View.OnClickListener {
         _binding = FragmentNewProjectBinding.inflate(inflater, container, false)
 //        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (activity as MainActivity).hideBottomNavigation()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

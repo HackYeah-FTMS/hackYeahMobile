@@ -16,17 +16,15 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/project_item_image"
+            android:id="@+id/idea_item_image"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/project_title"
+            android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -38,24 +36,25 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/project_item_image"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/project_description"
-            android:layout_width="200dp"
+            android:id="@+id/idea_description"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:ellipsize="end"
-            android:maxLines="1"
             android:fontFamily="@font/raleway_regular"
-            tools:text="description"
+            android:maxLines="3"
             android:textColor="@color/color_grey_text"
             android:textSize="17sp"
+            android:ellipsize="end"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/project_item_image"
-            app:layout_constraintTop_toBottomOf="@id/project_title" />
+            app:layout_constraintEnd_toStartOf="@id/idea_item_image"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_name"
+            tools:text="description" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

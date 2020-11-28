@@ -52,4 +52,10 @@
         tools:layout="@layout/fragment_new_project"
         android:label="FragmentNewProject" />
 
+    <fragment
+        android:id="@+id/fragmentIdeas"
+        tools:layout="@layout/fragment_ideas"
+        android:name="com.hackyeah.app.ui.ideas.FragmentIdeas"
+        android:label="FragmentIdeas" />
+
 </navigation>

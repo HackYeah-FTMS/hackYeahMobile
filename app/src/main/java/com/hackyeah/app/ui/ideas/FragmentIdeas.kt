@@ -1,4 +1,4 @@
-package com.hackyeah.app.ui.projects
+package com.hackyeah.app.ui.ideas
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -14,19 +14,23 @@ import com.hackyeah.app.di.viewmodels.ViewModelProviderFactory
 import com.hackyeah.app.ui.base.BaseFragment
 import javax.inject.Inject
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hackyeah.app.databinding.FragmentIdeasBinding
+import com.hackyeah.app.ui.ideas.list.AdapterIdeas
 import com.hackyeah.app.ui.main.MainActivity
+import com.hackyeah.app.ui.projects.FragmentProjectsDirections
+import com.hackyeah.app.ui.projects.ViewModelProjects
 import com.hackyeah.app.ui.projects.list.AdapterProjects
 
-class FragmentProjects : BaseFragment(), View.OnClickListener {
+class FragmentIdeas : BaseFragment(), View.OnClickListener {
 
-    private var _binding: FragmentProjectsBinding? = null
+    private var _binding: FragmentIdeasBinding? = null
     private val binding get() = _binding!!
 
     @Inject
     lateinit var viewModelFactory: ViewModelProviderFactory
 
-    private val viewModelProjects: ViewModelProjects by lazy {
-        ViewModelProvider(requireActivity(), viewModelFactory).get(ViewModelProjects::class.java)
+    private val viewModelIdeas: ViewModelIdeas by lazy {
+        ViewModelProvider(requireActivity(), viewModelFactory).get(ViewModelIdeas::class.java)
     }
 
     override fun inject() {
@@ -41,7 +45,7 @@ class FragmentProjects : BaseFragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentProjectsBinding.inflate(inflater, container, false)
+        _binding = FragmentIdeasBinding.inflate(inflater, container, false)
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
@@ -56,32 +60,26 @@ class FragmentProjects : BaseFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonNewProject.setOnClickListener(this)
-        binding.projectRecyclerView.adapter = AdapterProjects()
-        binding.projectRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.ideasRecyclerView.adapter = AdapterIdeas()
+        binding.ideasRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val adapterProjects = binding.projectRecyclerView.adapter as AdapterProjects
+        val adapterProjects = binding.ideasRecyclerView.adapter as AdapterIdeas
         adapterProjects.onClickListener = {
-            Navigation.findNavController(requireView()).navigate(
-                FragmentProjectsDirections.actionFragmentProjectsToFragmentProjectDetails(it)
-            )
+//            Navigation.findNavController(requireView()).navigate(
+//                FragmentProjectsDirections.actionFragmentProjectsToFragmentProjectDetails(it)
+//            )
         }
 
-        viewModelProjects
-            .getProjects()
+        viewModelIdeas
+            .getIdeas()
             .observe(viewLifecycleOwner, {
-                adapterProjects.projectList = it
+                adapterProjects.ideasList = it
             })
     }
 
+
     override fun onClick(v: View) {
-        when(v.id){
-            binding.buttonNewProject.id ->{
-                Navigation.findNavController(requireView()).navigate(
-                    FragmentProjectsDirections.actionFragmentProjectsToFragmentNewProject()
-                )
-            }
-        }
+
     }
 
     override fun onDestroyView() {

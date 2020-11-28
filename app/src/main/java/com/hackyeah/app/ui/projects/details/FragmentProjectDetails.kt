@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.hackyeah.app.R
 import com.hackyeah.app.databinding.FragmentProjectDetailsBinding
+import com.hackyeah.app.ui.main.MainActivity
 import com.hackyeah.app.ui.projects.ViewModelProjects
 
 class FragmentProjectDetails : BaseFragment(), View.OnClickListener {
@@ -46,6 +47,11 @@ class FragmentProjectDetails : BaseFragment(), View.OnClickListener {
     ): View? {
         _binding = FragmentProjectDetailsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (activity as MainActivity).hideBottomNavigation()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
