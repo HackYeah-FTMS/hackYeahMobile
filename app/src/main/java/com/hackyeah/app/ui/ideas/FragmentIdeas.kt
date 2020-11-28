@@ -65,9 +65,9 @@ class FragmentIdeas : BaseFragment(), View.OnClickListener {
 
         val adapterProjects = binding.ideasRecyclerView.adapter as AdapterIdeas
         adapterProjects.onClickListener = {
-//            Navigation.findNavController(requireView()).navigate(
-//                FragmentProjectsDirections.actionFragmentProjectsToFragmentProjectDetails(it)
-//            )
+            Navigation.findNavController(requireView()).navigate(
+                FragmentIdeasDirections.actionFragmentIdeasToFragmentIdeaDetails(it)
+            )
         }
 
         viewModelIdeas

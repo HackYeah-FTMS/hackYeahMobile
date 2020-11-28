@@ -9,4 +9,6 @@ class RepositoryIdeas @Inject constructor(
 
     fun getIdeas() = apiService.getIdeas()
 
+    fun getIdeaDetails(ideaId:Int) = apiService.getIdeaDetails(ideaId)
+
 }

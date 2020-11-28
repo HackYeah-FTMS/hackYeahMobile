@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.hackyeah.app.data.NetworkState
 import com.hackyeah.app.data.Status
 import com.hackyeah.app.data.model.Idea
+import com.hackyeah.app.data.model.IdeaDetails
 import com.hackyeah.app.data.repository.RepositoryIdeas
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -20,6 +21,7 @@ class ViewModelIdeas @Inject constructor(
     private var disposable: Disposable? = null
 
     private var ideaList: MutableLiveData<List<Idea>> = MutableLiveData()
+    private var singleIdeaDetails: MutableLiveData<IdeaDetails> = MutableLiveData()
 
     @SuppressLint("CheckResult")
     fun getIdeas(): MutableLiveData<List<Idea>> {
@@ -49,11 +51,35 @@ class ViewModelIdeas @Inject constructor(
         return ideaList
     }
 
-    fun getIdeaById(id: Int) = ideaList.value?.firstOrNull() { it.id == id }
+    fun getIdeaById(ideaId: Int): MutableLiveData<IdeaDetails> {
+        disposable = ideasRepository
+            .getIdeaDetails(ideaId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { idea ->
+                    if (idea == null) {
+                        networkState.postValue(NetworkState(status = Status.FAILED))
+                        return@subscribe
+                    }
+                    networkState.postValue(NetworkState(Status.SUCCESS))
+                    singleIdeaDetails.postValue(idea)
+                },
+                { throwable ->
+                    networkState.postValue(
+                        NetworkState(
+                            status = Status.FAILED,
+                            error = throwable
+                        )
+                    )
+                }
+            )
+
+        return singleIdeaDetails
+    }
 
     fun resetNetworkState() {
         networkState.value = NetworkState(Status.RESET)
-
     }
 
     override fun onCleared() {

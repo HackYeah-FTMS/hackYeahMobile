@@ -5,6 +5,7 @@ import com.hackyeah.app.di.ideas.IdeasViewModelModule
 import com.hackyeah.app.di.projects.ProjectsViewModelModule
 import com.hackyeah.app.di.viewmodels.ViewModelFactoryModule
 import com.hackyeah.app.ui.ideas.FragmentIdeas
+import com.hackyeah.app.ui.ideas.details.FragmentIdeaDetails
 import com.hackyeah.app.ui.main.MainActivity
 import com.hackyeah.app.ui.projects.FragmentProjects
 import com.hackyeah.app.ui.projects.add.FragmentNewProject
@@ -39,4 +40,5 @@ interface AppComponent {
     fun inject(fragment: FragmentProjectDetails)
     fun inject(fragment: FragmentNewProject)
     fun inject(fragment: FragmentIdeas)
+    fun inject(fragment: FragmentIdeaDetails)
 }
