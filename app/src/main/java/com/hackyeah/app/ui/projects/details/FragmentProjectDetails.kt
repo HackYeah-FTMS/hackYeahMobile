@@ -28,6 +28,8 @@ class FragmentProjectDetails : BaseFragment(), View.OnClickListener {
 
     private val arguments: FragmentProjectDetailsArgs by navArgs()
 
+    private var pointSet = false
+
     @Inject
     lateinit var viewModelFactory: ViewModelProviderFactory
 
@@ -117,6 +119,10 @@ class FragmentProjectDetails : BaseFragment(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             binding.pointsWrapper.id -> {
+                if( pointSet ){
+                    return
+                }
+                pointSet = true
                 binding.pointsCounter.setTextColor(resources.getColor(R.color.color_blue_dark))
                 binding.pointsCounter.text =
                     (Integer.parseInt(binding.pointsCounter.text.toString()) + 1).toString()

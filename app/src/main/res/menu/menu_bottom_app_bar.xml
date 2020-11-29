@@ -15,7 +15,7 @@
         android:icon="@drawable/ic_idea"/>
 
     <item android:id="@+id/fragmentZeroWaste"
-        android:title="Zero waste"
+        android:title="Doradź mi!"
         app:showAsAction="ifRoom"
         android:orderInCategory="3"
         android:icon="@drawable/zero_waste_1"/>

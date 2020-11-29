@@ -35,8 +35,11 @@ class FragmentZeroWaste : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
+        if (activity == null) {
+            return
+        }
         (activity as MainActivity).showBottomNavigation()
-        (requireActivity() as MainActivity).showHUD()
+        (activity as MainActivity).showHUD()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -53,7 +56,10 @@ class FragmentZeroWaste : BaseFragment() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                (requireActivity() as MainActivity).hideHUD()
+                if (activity == null) {
+                    return
+                }
+                (activity as MainActivity).hideHUD()
             }
         }
         binding.webview.settings.cacheMode = WebSettings.LOAD_NO_CACHE
